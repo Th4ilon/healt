@@ -1,5 +1,4 @@
 import * as React from "react";
-import { DropDownList } from "@progress/kendo-react-dropdowns";
 import {
   MultiSelectTree,
   getMultiSelectTreeValue,
@@ -7,7 +6,6 @@ import {
 import {
   processMultiSelectTreeData,
   expandedState,
-  getValueMap
 } from "./multiselecttree-data-operations";
 import SchedulingCalendar from "./SchedulingCalendar"
 

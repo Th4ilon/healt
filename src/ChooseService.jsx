@@ -1,36 +1,22 @@
 import * as React from "react";
-import { DropDownList } from "@progress/kendo-react-dropdowns";
-import { Field } from "@progress/kendo-react-form";
-import { Button, ButtonGroup } from "@progress/kendo-react-buttons";
-import { Observable, of } from "rxjs/operators";
+import { Button } from "@progress/kendo-react-buttons";
 import "./App.css";
-import {
-  ListView,
-  ListViewHeader,
-  ListViewFooter,
-} from "@progress/kendo-react-listview";
-import {
-  MultiSelectTree,
-  getMultiSelectTreeValue,
-} from "@progress/kendo-react-dropdowns";
-import {
-  processMultiSelectTreeData,
-  expandedState,
-} from "./multiselecttree-data-operations";
+import { ListView } from "@progress/kendo-react-listview";
+
 
 const dataItemKey = "id";
 const checkField = "checkField";
 const checkIndeterminateField = "checkIndeterminateField";
 const subItemsField = "items";
 const expandField = "expanded";
-const textField = "text";
-const fields = {
-  dataItemKey,
-  checkField,
-  checkIndeterminateField,
-  expandField,
-  subItemsField,
-};
+
+// const fields = {
+//   dataItemKey,
+//   checkField,
+//   checkIndeterminateField,
+//   expandField,
+//   subItemsField,
+// };
 
 const data = [
   {
@@ -92,6 +78,7 @@ const getStringTime = (duration) => {
   }
   return value + " " + units;
 };
+
 class ChooseService extends React.Component {
   constructor(props) {
     super(props);
