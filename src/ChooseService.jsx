@@ -1,22 +1,35 @@
 import * as React from "react";
+import { DropDownList } from "@progress/kendo-react-dropdowns";
 import { Button } from "@progress/kendo-react-buttons";
+import { Observable, of } from "rxjs/operators";
 import "./App.css";
-import { ListView } from "@progress/kendo-react-listview";
-
+import {
+  ListView,
+  ListViewHeader,
+  ListViewFooter,
+} from "@progress/kendo-react-listview";
+import {
+  MultiSelectTree,
+  getMultiSelectTreeValue,
+} from "@progress/kendo-react-dropdowns";
+import {
+  processMultiSelectTreeData,
+  expandedState,
+} from "./multiselecttree-data-operations";
 
 const dataItemKey = "id";
 const checkField = "checkField";
 const checkIndeterminateField = "checkIndeterminateField";
 const subItemsField = "items";
 const expandField = "expanded";
-
-// const fields = {
-//   dataItemKey,
-//   checkField,
-//   checkIndeterminateField,
-//   expandField,
-//   subItemsField,
-// };
+const textField = "text";
+const fields = {
+  dataItemKey,
+  checkField,
+  checkIndeterminateField,
+  expandField,
+  subItemsField,
+};
 
 const data = [
   {
@@ -79,118 +92,101 @@ const getStringTime = (duration) => {
   return value + " " + units;
 };
 
-class ChooseService extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: [],
-      selectedService: {},
-      services: this.props.services,
-      expanded: [data[0][dataItemKey]],
-    };
-  }
-
-  ItemRender = (props) => {
-    let item = props.dataItem;
-    console.log(item, this.state.selectedService);
-    return (
-      <div
-        className="border-bottom align-middle px-3 py-1"
-        style={{
-          margin: 0,
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
+const ItemRender = (props) => {
+  let item = props.dataItem;
+  return (
+    <div
+      className="row p-2 border-bottom align-middle"
+      style={{
+        margin: 0,
+      }}
+    >
+      <div className="col-5">
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            flex: 2,
+            fontWeight: "bold",
           }}
         >
-          <div
-            style={{
-              fontWeight: "bold",
-            }}
-          >
-            {item.name}
-          </div>
-          <div>{item.category}</div>
+          {item.name}
         </div>
         <div
           style={{
-            display: "flex",
-            flexDirection: "column",
-            flex: 1,
+            marginTop: "10px",
           }}
         >
-          <div>Price: ${item.price}</div>
-          <div>Time: {getStringTime(item.duration)}</div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flex: 1,
-            justifyContent: "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <Button
-            togglable={true}
-            selected={this.state.selectedService.id === item.id}
-            onClick={(e) => {
-              console.log(this.state.selectedService.id, item.id);
-              this.handleClick(item, e);
-            }}
-          >
-            SELECT
-          </Button>
+          {item.category}
         </div>
       </div>
-    );
+      <div className="col-5">
+        <div>Price: ${item.price}</div>
+        <div>Time: {getStringTime(item.duration)}</div>
+      </div>
+      <div className="col-2">
+        <Button themeColor={"primary"}>ADD</Button>
+      </div>
+    </div>
+  );
+};
+
+class ChooseService extends React.Component {
+  state = {
+    value: [],
+    servicesData: [],
+    expanded: [data[0][dataItemKey]],
   };
 
-  handleClick = (service, e) => {
-    this.setState({ selectedService: service });
-    console.log(this.state);
-    e.preventDefault();
-  };
-  // onChange = (event) => {
-  //   this.setState({
-  //     value: getMultiSelectTreeValue(data, {
-  //       ...fields,
-  //       ...event,
-  //       value: this.state.value,
-  //     }),
-  //   });
-  // };
-  // onExpandChange = (event) => {
-  //   this.setState({
-  //     expanded: expandedState(event.item, dataItemKey, this.state.expanded),
-  //   });
-  // };
-  componentDidUpdate(prevProps) {
-    // Typical usage (don't forget to compare props):
-    if (!prevProps.services.length) {
-      this.setState({ services: this.props.services });
-    }
-    //
+  constructor() {
+    super();
+    this.getServicesData();
   }
+
+  onChange = (event) => {
+    this.setState({
+      value: getMultiSelectTreeValue(data, {
+        ...fields,
+        ...event,
+        value: this.state.value,
+      }),
+    });
+  };
+  onExpandChange = (event) => {
+    this.setState({
+      expanded: expandedState(event.item, dataItemKey, this.state.expanded),
+    });
+  };
+  getServicesData = async () => {
+    let response = await fetch(
+      "https://tenxhealth-api-apim.azure-api.net/services"
+    );
+    let json = await response.json();
+    //console.log("Services", json);
+    this.setState({
+      servicesData: json,
+    });
+    return json;
+  };
+
   render() {
     return (
       <div style={{ width: "100%" }}>
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
-            justifyContent: "right",
-            boxShadow: "0 0 4px 4px rgba(0, 0, 0, .1)",
-            marginTop: 30,
+            flexDirection: "row",
+            justifyContent: "center",
           }}
         >
-          <ListView data={this.state.services} item={this.ItemRender} />
+          <div className={"step-title"}>Services</div>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "right",
+            paddingTop: 30,
+          }}
+        >
+          <ListView data={this.state.servicesData} item={ItemRender} />
         </div>
       </div>
     );

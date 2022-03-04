@@ -1,5 +1,6 @@
 import * as React from "react";
 import { FieldWrapper } from "@progress/kendo-react-form";
+import { Button } from "@progress/kendo-react-buttons";
 import {
   Input,
   MaskedTextBox,
@@ -37,6 +38,16 @@ import {
   DropDownTree,
 } from "@progress/kendo-react-dropdowns";
 import { processTreeData, expandedState } from "./tree-data-operations";
+// input with icon
+{
+  /* <label for="icon-left">Input with icon on the left</label>
+            <span class="k-textbox" style="width: 100%;">
+              <span class="k-input-prefix">
+                <a href="#" class="k-icon k-i-search"></a>
+              </span>
+              <input type="text" id="icon-left" class="k-input">
+            </span> */
+}
 export const FormInput = (fieldRenderProps) => {
   const {
     validationMessage,
@@ -47,9 +58,11 @@ export const FormInput = (fieldRenderProps) => {
     disabled,
     hint,
     type,
+    iconButton,
     optional,
     ...others
   } = fieldRenderProps;
+
   const showValidationMessage = touched && validationMessage;
   const showHint = !showValidationMessage && hint;
   const hintId = showHint ? `${id}_hint` : "";
@@ -65,14 +78,19 @@ export const FormInput = (fieldRenderProps) => {
         {label}
       </Label>
       <div className={"k-form-field-wrap"}>
-        <Input
-          valid={valid}
-          type={type}
-          id={id}
-          disabled={disabled}
-          ariaDescribedBy={`${hintId} ${errorId}`}
-          {...others}
-        />
+        <span>
+          <Input
+            valid={valid}
+            type={type}
+            id={id}
+            style={{ width: iconButton ? "90%" : "100%" }}
+            disabled={disabled}
+            ariaDescribedBy={`${hintId} ${errorId}`}
+            children={[]}
+            {...others}
+          />
+          {iconButton}
+        </span>
         {showHint && <Hint id={hintId}>{hint}</Hint>}
         {showValidationMessage && (
           <Error id={errorId}>{validationMessage}</Error>
@@ -889,6 +907,7 @@ export const FormDateTimePicker = (fieldRenderProps) => {
     valid,
     disabled,
     hint,
+    format,
     wrapperStyle,
     ...others
   } = fieldRenderProps;
@@ -911,6 +930,7 @@ export const FormDateTimePicker = (fieldRenderProps) => {
         ariaLabelledBy={labelId}
         ariaDescribedBy={`${hintId} ${errorId}`}
         valid={valid}
+        format={format}
         id={id}
         disabled={disabled}
         {...others}
