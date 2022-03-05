@@ -24,19 +24,25 @@ const fields = {
   expandField,
   subItemsField,
 };
+
+// back info
 const data = [
   {
     text: "Concierge",
-    id: 1,
+    id: 0,
     unselectableItem: true,
     items: [
       {
         text: "Magdalena",
-        id: 0,
+        id: 1,
       },
       {
         text: "josh",
-        id: 1,
+        id: 2,
+      },
+      {
+        text: "simon",
+        id: 3,
       }
     ],
   }
@@ -50,6 +56,7 @@ class SelectLocation extends React.Component {
     locationSelect: false,
     expanded: [data[0][dataItemKey]],
   };
+  
   onChange = (event) => {
     this.setState({
       value: getMultiSelectTreeValue(data, {
@@ -102,6 +109,7 @@ class SelectLocation extends React.Component {
           <div style={{ flexGrow: 4 }}></div>
         </div>
         {schedulingCalender}
+        {/* cards */}
       </div>
     );
   }
