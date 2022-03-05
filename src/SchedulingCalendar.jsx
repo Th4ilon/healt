@@ -40,21 +40,33 @@ class SchedulingCalendar extends React.Component {
     super(props);
     this.state = {
       value: new Date(),
-      dia: ''
+      dia: '',
+      officeId: this.props.selectedOffice.id,
+      officeName: this.props.selectedOffice.text,
     };
    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
-    console.log('event: ', event);
-    const dayOfWeek = event.value.getDay();
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // logica de activar desactivar fechas
+    this.setState({
+      officeId: this.props.selectedOffice.id,
+      officeName: this.props.selectedOffice.text,
+    }, () => { // utilizar esta función para la lógica de generación de cartas
       
-      this.setState({
+      console.log(this.state.officeId);
+      console.log(this.state.officeName);
+      console.log('event: ', event);
+
+      const dayOfWeek = event.value.getDay();
+      console.log(this.state.officeName);
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) { // logica de activar desactivar fechas
+        this.setState({
         dia: event.value.getDay()
       });
       console.log(this.state.dia);
     }
+    });
+    
   }
 
   render() {

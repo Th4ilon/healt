@@ -10,6 +10,7 @@ import {
   getValueMap
 } from "./multiselecttree-data-operations";
 import SchedulingCalendar from "./SchedulingCalendar"
+import { localeInfo } from "@telerik/kendo-intl";
 
 const dataItemKey = "id";
 const checkField = "checkField";
@@ -24,40 +25,33 @@ const fields = {
   expandField,
   subItemsField,
 };
-const data = [
-  {
-    text: "Concierge",
-    id: 1,
-    unselectableItem: true,
-    items: [
-      {
-        text: "Magdalena",
-        id: 0,
-      },
-      {
-        text: "josh",
-        id: 1,
-      }
-    ],
-  }
-];
 
+//const data = this.props.locationState;
 
 class SelectLocation extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
 
   state = {
     value: [],
     locationSelect: false,
-    expanded: [data[0][dataItemKey]],
+    expanded: [this.props.locationState[0][dataItemKey]],
+    locationsProps: this.props.locationState[0],
+    selecetedOfficeId: [],
   };
   onChange = (event) => {
     this.setState({
-      value: getMultiSelectTreeValue(data, {
+      value: getMultiSelectTreeValue([this.state.locationsProps], {
         ...fields,
         ...event,
         value: this.state.value,
       }),
       locationSelect: true
+    });
+    this.setState({
+      selecetedOfficeId: event.items[0],
     });
   };
 
@@ -66,9 +60,11 @@ class SelectLocation extends React.Component {
       expanded: expandedState(event.item, dataItemKey, this.state.expanded),
     });
   };
+  
+
 
   treeData = () => {
-    let result = processMultiSelectTreeData(data, { ...this.state, ...fields });
+    let result = processMultiSelectTreeData([this.state.locationsProps], { ...this.state, ...fields });
     return result
   };
 
@@ -76,7 +72,9 @@ class SelectLocation extends React.Component {
 
     let schedulingCalender = !this.state.locationSelect
       ? null
-      : <SchedulingCalendar />
+      : <SchedulingCalendar 
+          selectedOffice={this.state.selecetedOfficeId}
+      />
 
     return (
       <div style={{ display: "flex", flexDirection: "column", paddingTop: 30 }}>

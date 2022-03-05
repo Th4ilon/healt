@@ -39,6 +39,48 @@ class App extends React.Component {
         zipCode: 0,
       },
     },
+    locationDetailsState: [{
+      text: "BrickAndMortar",
+      id: 0,
+      unselectableItem: true,
+      items: [
+        {
+          text: "Carrie Carda",
+          id: 330874,
+        },
+        {
+          text: "Josh Harrellson",
+          id: 331665,
+        },
+        {
+          text: "Maggy Toporkiewicz",
+          id: 331699,
+        }
+      ],
+    },
+    {
+      text: "Concierge",
+      id: 1,
+      unselectableItem: true,
+      items: [
+        {
+          text: "Monika Szmit",
+          id: 331700,
+        }
+      ],
+    },
+    {
+      text: "CardoneEvent",
+      id: 2,
+      unselectableItem: true,
+      items: [
+        {
+          text: "360",
+          id: 333595,
+        }
+      ],
+    },
+  ],
     patient: {},
     steps: [
       {
@@ -112,9 +154,16 @@ class App extends React.Component {
         } else {
           isValid = true;
         }
+        console.log("Location details is executing");
+        let officeDetails = this.state.locationDetailsState;
+        this.handleOfficeCheck(officeDetails);
         this.setState({...this.state, busy:false});
         break;
       case 2:
+        this.setState({...this.state, busy:true});
+        //console.log("Case two is executing");
+        //let officeDetails = this.state.locationDetailsState;
+        //this.handleOfficeCheck(officeDetails);
         isValid = true;
         break;
 
@@ -215,6 +264,22 @@ class App extends React.Component {
       },
     });
   };
+
+  handleOfficeCheck = async (event) => {
+    this.setState({
+      locationDetailsState: {
+        ...this.state.locationDetailsState
+      },
+    });
+    fetch('https://tenxhealth-api-apim.azure-api.net/offices', { 
+    headers: {
+    'Accept': 'application/json',
+    'Path': '/',
+    }
+    })
+    .then(response => response.json())
+    .then(json => console.log(json));
+  };
   // for this to make sure the element id name is same as data required in the form
   handleFormChange = (event) => {
     //check if the field is valid
@@ -243,7 +308,10 @@ class App extends React.Component {
         onChange={this.handleFormChange}
         onCheckPatient={this.handleCheckPatient}
       />,
-      <SelectLocation />,
+      <SelectLocation
+        locationState={this.state.locationDetailsState} 
+        onCheckOffice={this.handleOfficeCheck}
+      />,
     ];
 
     return (
