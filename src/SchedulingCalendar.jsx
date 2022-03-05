@@ -71,13 +71,15 @@ class SchedulingCalendar extends React.Component {
           <select defaultValue={this.state.dia} onClick={this.showCalendar}>
             <option  style={{ display:'none' }} value="dia">{this.state.dia}</option>
           </select>
-          {this.state.activeDate ? <Calendar cell={CustomCell} value={this.state.value} onChange={this.handleChange} /> : null}
+          {this.state.activeDate ? <Calendar  cell={CustomCell} value={this.state.value} onChange={this.handleChange} /> : null}
         </div>
         <CardsComponent dataFromParent={this.state.dia} />
       </div>
+      
     );
   }
 
 }
 
 export default SchedulingCalendar;
+

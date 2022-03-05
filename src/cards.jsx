@@ -20,13 +20,13 @@ class CardsComponent extends React.Component {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-evenly',
+          justifyContent: 'flex-start',
         }}
       >
         <div className="k-card-list">
           <Card orientation='horizontal'
             style={{
-              width: '100%',
+              width: '329px',
             }}
           >
 

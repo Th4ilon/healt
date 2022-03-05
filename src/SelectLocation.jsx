@@ -56,7 +56,7 @@ class SelectLocation extends React.Component {
     locationSelect: false,
     expanded: [data[0][dataItemKey]],
   };
-  
+
   onChange = (event) => {
     this.setState({
       value: getMultiSelectTreeValue(data, {
@@ -88,11 +88,11 @@ class SelectLocation extends React.Component {
     return (
       <div style={{ display: "flex", flexDirection: "column", paddingTop: 30 }}>
         <div style={{ display: "flex", flexDirection: "row", paddingBottom: 30 }}>
-          <div style={{ flexGrow: 4 }}></div>
+
           <div style={{ display: "flex", flexGrow: 2, flexDirection: "column" }}>
             <div>Select Location</div>
             <MultiSelectTree
-              style={{ width: "225px" }}
+              style={{ width: "329px" }}
               data={this.treeData()}
               value={this.state.value}
               onChange={this.onChange}
@@ -106,10 +106,11 @@ class SelectLocation extends React.Component {
               onExpandChange={this.onExpandChange}
             />
           </div>
-          <div style={{ flexGrow: 4 }}></div>
+
         </div>
-        {schedulingCalender}
-        {/* cards */}
+
+        <div style={{ display: "flex", flexDirection: "row", paddingBottom: 30 }}>{schedulingCalender}</div>
+
       </div>
     );
   }
