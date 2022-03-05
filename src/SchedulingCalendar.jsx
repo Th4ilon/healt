@@ -53,9 +53,9 @@ class SchedulingCalendar extends React.Component {
       officeName: this.props.selectedOffice.text,
     }, () => { // utilizar esta función para la lógica de generación de cartas
       
-      console.log(this.state.officeId);
-      console.log(this.state.officeName);
-      console.log('event: ', event);
+      //console.log(this.state.officeId);
+      //console.log(this.state.officeName);
+      //console.log('event: ', event);
 
       const dayOfWeek = event.value.getDay();
       console.log(this.state.officeName);
@@ -64,6 +64,17 @@ class SchedulingCalendar extends React.Component {
         dia: event.value.getDay()
       });
       console.log(this.state.dia);
+
+      // llamada API con office + dia (crear logica para localizar día de calendario seleccionado)
+      fetch('https://tenxhealth-api-apim.azure-api.net/appointments/office/'+officeId+'/availability?serviceIds=462561&from=2022-03-05&until=2022-03-06', { 
+        headers: {
+        'Accept': 'application/json',
+        'Path': '/',
+        }
+      })
+      .then(response => response.json())
+      .then(json => console.log(json));
+
     }
     });
     
