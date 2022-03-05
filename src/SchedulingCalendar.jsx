@@ -1,46 +1,67 @@
 import * as React from "react";
 import { Calendar } from '@progress/kendo-react-dateinputs';
 import "@mobiscroll/react/dist/css/mobiscroll.min.css";
-import CardsComponent from "./cards"
+import { classNames } from "@progress/kendo-react-common";
+import CardsComponent from "./cards";
+
+
+const CustomCell = props => {
+  const title = "We're closed on the weekends!";
+
+  const handleClick = () => {
+    if (!props.isWeekend) {
+      if (props.onClick) {
+        props.onClick(props.value);
+      }
+    }
+  };
+  
+  const some =  classNames({
+    "k-state-selected": props.isSelected,
+    "k-state-focused": props.isFocused
+  });
+  
+  const style = {
+    cursor: "pointer",
+    opacity: props.isWeekend ? 0.6 : 1
+  };
+
+  const titleValue = props.isWeekend ? title : '';
+  return <td onClick={handleClick} className={some} style={style}>
+    <span className="k-link" title={titleValue}>
+      {props.children}
+    </span>
+  </td>;
+};
 
 class SchedulingCalendar extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      view: 'day'
+      value: new Date(),
+      dia: ''
     };
-    this.handleChange = this.handleChange.bind(this);
+   this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(event) {
     console.log('event: ', event);
-    const dayOfWeek = event.value.getDay(); // 0 = Sunday, 6 = Saturday
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-      const dayOfWeek = event.value.getDay();
-      if (dayOfWeek !== 0 && dayOfWeek !== 6) { // logica de activar desactivar fechas
-
-        this.setState({
-          dia: event.value.getDay()
-        });
-        console.log(this.state.dia);
-      }
+    const dayOfWeek = event.value.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) { // logica de activar desactivar fechas
+      
+      this.setState({
+        dia: event.value.getDay()
+      });
+      console.log(this.state.dia);
     }
   }
 
   render() {
-    const renderCustomResource = (resource) => {
-      return <div className="resource-template-content">
-        <div className="resource-name">{resource.name}</div>
-        {/* <div className="resource-description">{resource.description}</div> */}
-        <img className="resource-avatar" src={resource.img} />
-      </div>;
-    }
-
     return (
       <div>
         <Calendar cell={CustomCell} value={this.state.value} onChange={this.handleChange} />
-        <CardsComponent />
+        <CardsComponent dataFromParent={this.state.dia}/>
       </div>
     );
   }
@@ -48,5 +69,3 @@ class SchedulingCalendar extends React.Component {
 }
 
 export default SchedulingCalendar;
-
-
