@@ -25,92 +25,29 @@ const fields = {
   subItemsField,
 };
 const data = [
+  {
+    text: "Concierge",
+    id: 1,
+    unselectableItem: true,
+    items: [
       {
-        text: "Cardone Event",
+        text: "Magdalena",
+        id: 0,
+      },
+      {
+        text: "josh",
         id: 1,
-        items: [
-          {
-            text: "10x Mastermind (Feb 7th)",
-            id: 0,
-          },
-          {
-            text: "10x 360 (Feb 10th)",
-            id: 1,
-          },
-          {
-            text: "Growth Conference 6",
-            id: 2,
-          }
-        ],
-      },
-      {
-        text: "Concierge",
-        id: 3,
-        items: [
-          {
-            text: "AZ",
-            id: 4,
-            items: [
-                {
-                    id: 5,
-                    text: "Scottsdale",
-                    items: [
-                        {
-                            id: 6,
-                            text: "Josh Harrellson"
-                        },
-                        {
-                            id: 7,
-                            text: "Maggy Toporkiewicz"
-                        },
-                        {
-                            id: 8,
-                            text: "Monica Szmit"
-                        }
-                    ]
-                }
-            ]
-          },
-          {
-            text: "FL",
-            id: 9,
-            items: [
-                {
-                    id: 10,
-                    text: "Miami",
-                    items: [
-                        {
-                            id: 11,
-                            text: "Gary Brecka"
-                        },
-                        {
-                            id: 12,
-                            text: "Madison Brecka"
-                        }
-                    ]
-                }
-            ]
-          },
-        ]
-      },
-      {
-        text: "In-Office",
-        id: 13,
-        items: [
-          {
-            text: "AZ",
-            id: 14
-          },
-        ]
-      },
-    ];
+      }
+    ],
+  }
+];
 
 
 class SelectLocation extends React.Component {
 
   state = {
     value: [],
-    locationSelect : false,
+    locationSelect: false,
     expanded: [data[0][dataItemKey]],
   };
   onChange = (event) => {
@@ -120,14 +57,16 @@ class SelectLocation extends React.Component {
         ...event,
         value: this.state.value,
       }),
-      locationSelect : true
+      locationSelect: true
     });
   };
+
   onExpandChange = (event) => {
     this.setState({
       expanded: expandedState(event.item, dataItemKey, this.state.expanded),
     });
   };
+
   treeData = () => {
     let result = processMultiSelectTreeData(data, { ...this.state, ...fields });
     return result
@@ -137,16 +76,16 @@ class SelectLocation extends React.Component {
 
     let schedulingCalender = !this.state.locationSelect
       ? null
-      : <SchedulingCalendar/>
+      : <SchedulingCalendar />
 
     return (
-      <div style={{display: "flex", flexDirection: "column", paddingTop: 30}}>
-        <div style={{display: "flex", flexDirection: "row", paddingBottom: 30}}>
-          <div style={{flexGrow: 4}}></div>
-          <div style={{display: "flex", flexGrow: 2, flexDirection: "column"}}>
-            <div>Select Location</div>  
+      <div style={{ display: "flex", flexDirection: "column", paddingTop: 30 }}>
+        <div style={{ display: "flex", flexDirection: "row", paddingBottom: 30 }}>
+          <div style={{ flexGrow: 4 }}></div>
+          <div style={{ display: "flex", flexGrow: 2, flexDirection: "column" }}>
+            <div>Select Location</div>
             <MultiSelectTree
-              style={{width: "225px"}}
+              style={{ width: "225px" }}
               data={this.treeData()}
               value={this.state.value}
               onChange={this.onChange}
@@ -160,7 +99,7 @@ class SelectLocation extends React.Component {
               onExpandChange={this.onExpandChange}
             />
           </div>
-          <div style={{flexGrow: 4}}></div>
+          <div style={{ flexGrow: 4 }}></div>
         </div>
         {schedulingCalender}
       </div>
@@ -169,3 +108,4 @@ class SelectLocation extends React.Component {
 }
 
 export default SelectLocation;
+
